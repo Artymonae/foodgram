@@ -61,14 +61,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Copy docker-compose.production.yml via SSH
+      - name: Copy compose.production.yaml via SSH
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          source: compose.production.yml
+          source: compose.production.yaml
           target: foodgram
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
@@ -79,7 +79,7 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd foodgram
-            sudo docker compose -f compose.production.yml pull
-            sudo docker compose -f compose.production.yml down
-            sudo docker compose -f compose.production.yml up -d
+            sudo docker compose -f compose.production.yaml pull
+            sudo docker compose -f compose.production.yaml down
+            sudo docker compose -f compose.production.yaml up -d
             sudo docker image prune -af
