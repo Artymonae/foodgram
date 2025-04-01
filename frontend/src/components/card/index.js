@@ -18,7 +18,9 @@ const Card = ({
   handleLike,
   handleAddToCart,
   updateOrders,
+  maxVisibleTags = 3,
 }) => {
+  const visibleTags = tags.slice(0, maxVisibleTags);
   const authContext = useContext(AuthContext);
   const [toLogin, setToLogin] = useState(false);
   const [whiteSpaceValue, setWhiteSpaceValue] = useState("nowrap");
@@ -39,7 +41,7 @@ const Card = ({
           }}
         />
       )}
-      <TagsContainer tags={tags} className={styles.card__tag} />
+      <TagsContainer tags={visibleTags} className={styles.card__tag} />
 
       <LinkComponent
         href={`/recipes/${id}`}

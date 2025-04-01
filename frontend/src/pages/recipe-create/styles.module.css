@@ -76,12 +76,10 @@
 }
 
 .ingredientsAdded {
-  display: flex;
-  gap: 8px;
   flex-wrap: wrap;
-  padding-left: 200px;
-  text-align: left;
-  margin-bottom: 30px;
+  gap: 8px;
+  padding-left: 0;
+  margin-bottom: 20px;
 }
 
 .fileInput {
@@ -139,6 +137,22 @@
 
 .checkboxGroup {
   margin-bottom: 36px;
+}
+
+
+.checkboxGroupTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.checkboxGroupItem {
+  flex: 0 0 auto;
+  margin: 0; 
+  padding: 8px 12px;
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 820px) {
@@ -201,6 +215,15 @@
   .ingredientsNameInput {
     width: 100%;
   }
+
+  .checkboxGroupTags {
+    gap: 6px;
+  }
+  
+  .checkboxGroupItem {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
 }
 
 @media screen and (max-width: 730px) {
@@ -212,3 +235,4 @@
     text-align: center;
   }
 }
+

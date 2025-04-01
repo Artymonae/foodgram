@@ -1,4 +1,4 @@
-import { Card, Title, Pagination, CardList, Container, Main, CheckboxGroup  } from '../../components'
+import { Card, Title, Pagination, CardList, Container, Main, CheckboxGroup } from '../../components'
 import styles from './styles.module.css'
 import { useRecipes } from '../../utils/index.js'
 import { useEffect } from 'react'
@@ -19,7 +19,7 @@ const Favorites = ({ updateOrders }) => {
     handleLike,
     handleAddToCart
   } = useRecipes()
-  
+
   const getRecipes = ({ page = 1, tags }) => {
     api
       .getRecipes({ page, is_favorited: Number(true), tags })
@@ -37,7 +37,7 @@ const Favorites = ({ updateOrders }) => {
   useEffect(_ => {
     api.getTags()
       .then(tags => {
-        setTagsValue(tags.map(tag => ({ ...tag, value: true })))
+        setTagsValue(tags.map(tag => ({ ...tag, value: false })))
       })
   }, [])
 

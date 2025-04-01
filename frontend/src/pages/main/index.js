@@ -1,4 +1,4 @@
-import { Card, Title, Pagination, CardList, Container, Main, CheckboxGroup  } from '../../components'
+import { Card, Title, Pagination, CardList, Container, Main, CheckboxGroup } from '../../components'
 import styles from './styles.module.css'
 import { useRecipes } from '../../utils/index.js'
 import { useEffect } from 'react'
@@ -37,7 +37,7 @@ const HomePage = ({ updateOrders }) => {
   useEffect(_ => {
     api.getTags()
       .then(tags => {
-        setTagsValue(tags.map(tag => ({ ...tag, value: true })))
+        setTagsValue(tags.map(tag => ({ ...tag, value: false })))
       })
   }, [])
 

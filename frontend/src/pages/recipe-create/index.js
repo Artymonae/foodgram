@@ -82,7 +82,7 @@ const RecipeCreate = ({ onEdit }) => {
 
   useEffect((_) => {
     api.getTags().then((tags) => {
-      setValue(tags.map((tag) => ({ ...tag, value: true })));
+      setValue(tags.map((tag) => ({ ...tag, value: false })));
     });
   }, []);
 
@@ -156,14 +156,13 @@ const RecipeCreate = ({ onEdit }) => {
                 }
                 if (ingredients) {
                   return setSubmitError({
-                    submitError: `Ингредиенты: ${
-                      ingredients
-                        .filter((item) => Object.keys(item).length)
-                        .map((item) => {
-                          const error = item[Object.keys(item)[0]];
-                          return error && error.join(" ,");
-                        })[0]
-                    }`,
+                    submitError: `Ингредиенты: ${ingredients
+                      .filter((item) => Object.keys(item).length)
+                      .map((item) => {
+                        const error = item[Object.keys(item)[0]];
+                        return error && error.join(" ,");
+                      })[0]
+                      }`,
                   });
                 }
                 if (cooking_time) {
@@ -192,7 +191,7 @@ const RecipeCreate = ({ onEdit }) => {
             label="Теги"
             values={value}
             emptyText="Нет загруженных тегов"
-            className={styles.checkboxGroup}
+            className={cn(styles.checkboxGroup, styles.customCheckboxGroup)}
             labelClassName={styles.checkboxGroupLabel}
             tagsClassName={styles.checkboxGroupTags}
             checkboxClassName={styles.checkboxGroupItem}
