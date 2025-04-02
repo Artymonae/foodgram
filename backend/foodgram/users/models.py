@@ -98,13 +98,14 @@ class Follow(models.Model):
     following = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
+        related_name="followers",
         verbose_name="На кого подписан",
         related_name="followers",
     )
 
     class Meta:
 
-        ordering = ("id",)
+        ordering = ("following",)
         verbose_name = "Подписчик"
         verbose_name_plural = "Подписчики"
         constraints = [

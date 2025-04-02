@@ -30,9 +30,9 @@ THIRD_PARTY_APPS = [
     "djoser",
 ]
 LOCAL_APPS = [
-    "api.apps.ApiConfig",
-    "recipes.apps.RecipesConfig",
     "users.apps.UsersConfig",
+    "recipes.apps.RecipesConfig",
+    "api.apps.ApiConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -122,7 +122,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DJOSER = {
     "LOGIN_FIELD": "email",
     "SERIALIZERS": {
-        "user": "api.serializers.CreateUserSerializer",
+        "user": "api.serializers.UserSerializer",
         "current_user": "api.serializers.CreateUserSerializer",
         "user_create": "api.serializers.CreateUserSerializer",
     },

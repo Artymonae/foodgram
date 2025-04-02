@@ -207,11 +207,10 @@ class UserViewSet(DjoserUserViewSet):
             logger.info("User %s updated avatar", request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-        elif request.method == "DELETE":
-            request.user.avatar.delete()
+        request.user.avatar.delete()
 
-            logger.info("User %s deleted avatar", request.user)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+        logger.info("User %s deleted avatar", request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
         methods=("POST", "DELETE",),
@@ -235,22 +234,21 @@ class UserViewSet(DjoserUserViewSet):
             logger.info("User %s subscribed to %s", user, following)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        elif request.method == "DELETE":
-            follow = Follow.objects.filter(
-                user=user.id, following=following.id,
-            )
-            if follow.exists():
-                follow.delete()
+        follow = Follow.objects.filter(
+            user=user.id, following=following.id,
+        )
+        if follow.exists():
+            follow.delete()
 
-                logger.info("User %s unsubscribed from %s", user, following)
-                return Response(status=status.HTTP_204_NO_CONTENT)
+            logger.info("User %s unsubscribed from %s", user, following)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-            logger.error(
-                "Subscription not found for user %s and following %s",
-                user,
-                following,
-            )
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        logger.error(
+            "Subscription not found for user %s and following %s",
+            user,
+            following,
+        )
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(
         methods=("GET",),
@@ -267,14 +265,13 @@ class UserViewSet(DjoserUserViewSet):
         if limit:
             following_users = following_users[:int(limit)]
 
-        paginator = Pagination()
-        result_page = paginator.paginate_queryset(following_users, request)
+        result_page = self.paginate_queryset(following_users, request)
         serializer = GetFollowSerializer(
             result_page, many=True, context={"request": request},
         )
 
         logger.info("User %s requested subscriptions", request.user)
-        return paginator.get_paginated_response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):

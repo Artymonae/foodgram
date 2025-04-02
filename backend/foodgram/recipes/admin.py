@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Count
 from recipes.models import (
     Tag, Ingredient, Recipe,
     RecipeIngredient, Favorite,
@@ -43,6 +44,9 @@ class RecipeAdmin(admin.ModelAdmin):
         "author",
         "pub_date",
         "cooking_time",
+        "favorites_count",
+        "display_ingredients",
+        "display_tags",
     )
     list_filter = (
         "pub_date",
@@ -57,6 +61,26 @@ class RecipeAdmin(admin.ModelAdmin):
     inlines = [RecipeIngredientInline]
     ordering = ("-pub_date",)
     readonly_fields = ("pub_date",)
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.prefetch_related('ingredients', 'tags')
+        queryset = queryset.annotate(favorites_count=Count('favorites'))
+        return queryset
+
+    @admin.display(description="В избранном")
+    def favorites_count(self, obj):
+        return obj.favorites_count
+
+    @admin.display(description="Ингредиенты")
+    def display_ingredients(self, obj):
+        return ", ".join(
+            [ingredient.name for ingredient in obj.ingredients.all()]
+        )
+
+    @admin.display(description="Теги")
+    def display_tags(self, obj):
+        return ", ".join([tag.name for tag in obj.tags.all()])
 
 
 @admin.register(RecipeIngredient)

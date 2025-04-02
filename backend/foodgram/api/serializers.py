@@ -1,45 +1,45 @@
 """Модуль сериализаторов для API-сервиса."""
 import logging
 
+from djoser.serializers import UserSerializer as DjoserUser
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from api.helpers import Base64ImageField
+
+from drf_extra_fields.fields import Base64ImageField
 from recipes.models import (
     Favorite, Ingredient, Recipe,
     RecipeIngredient, ShoppingCart, Tag,)
 from users.constants import MAX_NAME_LENGTH, MIN_PASSWORD_LENGTH
 from users.models import Follow, User
 
+from api.mixins import UserRecipeRelationSerializerMixin
+
+
 logger = logging.getLogger(__name__)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(DjoserUser):
     """Сериализатор пользователя для получения данных с инф. о подписке."""
 
     is_subscribed = serializers.SerializerMethodField(
         method_name="get_is_followed",
     )
-    avatar = Base64ImageField()
-
-    class Meta:
-
-        model = User
-        fields = (
-            "id",
-            "username",
-            "email",
-            "first_name",
-            "last_name",
-            "avatar",
-            "is_subscribed",
-        )
+    avatar = Base64ImageField(required=False)
 
     def get_is_followed(self, obj):
         request = self.context.get("request")
-        if request and request.user.is_authenticated:
-            return request.user.following.filter(following=obj).exists()
-        return False
+        return (
+            request
+            and request.user.is_authenticated
+            and request.user.following.filter(following=obj).exists()
+        )
+
+    class Meta(DjoserUser.Meta):
+        fields = DjoserUser.Meta.fields + (
+            "is_subscribed",
+            "avatar",
+        )
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -166,15 +166,19 @@ class GetRecipeSerializer(serializers.ModelSerializer):
 
     def get_is_in_favorite(self, obj):
         request = self.context.get("request")
-        if request and request.user.is_authenticated:
-            return request.user.user_favorite.filter(recipe=obj).exists()
-        return False
+        return (
+            request
+            and request.user.is_authenticated
+            and request.user.user_favorite.filter(recipe=obj).exists()
+        )
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get("request")
-        if request and request.user.is_authenticated:
-            return request.user.cart_recipes.filter(recipe=obj).exists()
-        return False
+        return (
+            request
+            and request.user.is_authenticated
+            and request.user.cart_recipes.filter(recipe=obj).exists()
+        )
 
 
 class RecipesSerializer(serializers.ModelSerializer):
@@ -311,21 +315,6 @@ class GetFollowSerializer(UserSerializer):
     def get_recipes_count(self, user):
         return user.recipes.count()
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        request = self.context.get("request")
-        limit = request.query_params.get("recipes_limit") if request else None
-        recipes = instance.recipes.all()
-
-        if limit and limit.isdigit():
-            recipes = recipes[:int(limit)]
-
-        representation["recipes"] = RecipeSerializer(
-            recipes, context=self.context, many=True,
-        ).data
-        representation["recipes_count"] = instance.recipes.count()
-        return representation
-
 
 class FollowSerializer(serializers.ModelSerializer):
     """Сериализатор для создания подписки."""
@@ -355,52 +344,27 @@ class FollowSerializer(serializers.ModelSerializer):
         ).data
 
 
-class ShoppingCartSerializer(serializers.ModelSerializer):
+class ShoppingCartSerializer(UserRecipeRelationSerializerMixin):
     """Сериализатор для корзины покупок."""
 
-    class Meta:
-
+    class Meta(UserRecipeRelationSerializerMixin.Meta):
         model = ShoppingCart
-        fields = ("user", "recipe",)
         validators = [
             UniqueTogetherValidator(
                 queryset=ShoppingCart.objects.all(),
-                fields=(
-                    "user",
-                    "recipe",
-                ),
+                fields=("user", "recipe"),
             )
         ]
 
-    def to_representation(self, instance):
-        return RecipeSerializer(
-            instance.recipe,
-            context=self.context,
-        ).data
 
-
-class FavoriteSerializer(serializers.ModelSerializer):
+class FavoriteSerializer(UserRecipeRelationSerializerMixin):
     """Сериализатор для избранных рецептов."""
 
-    class Meta:
-
+    class Meta(UserRecipeRelationSerializerMixin.Meta):
         model = Favorite
-        fields = (
-            "user",
-            "recipe",
-        )
         validators = [
             UniqueTogetherValidator(
                 queryset=Favorite.objects.all(),
-                fields=(
-                    "user",
-                    "recipe",
-                ),
+                fields=("user", "recipe"),
             )
         ]
-
-    def to_representation(self, instance):
-        return RecipeSerializer(
-            instance.recipe,
-            context=self.context,
-        ).data

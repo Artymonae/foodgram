@@ -2,6 +2,8 @@
 ### Описание проекта
 Foodgram — это веб-приложение для обмена рецептами и создания сообщества любителей кулинарии. Пользователи могут просматривать, делиться и обсуждать рецепты, а также знакомиться с новыми кулинарными идеями.
 
+[![Main Foodgram Workflow](https://github.com/Artymonae/foodgram/actions/workflows/deploy.yaml/badge.svg)](https://github.com/Artymonae/foodgram/actions/workflows/deploy.yaml)
+
 ### Пример сайта
 
 [Пример сайта](https:/foodgramevans.serveftp.com/)
@@ -53,7 +55,17 @@ cd infra
 docker compose up --build
 ```
 
-### 3. Доступ к приложению:
+### 3. Заполняем базу данных.
+
+Для этого нам *необходимо:*
+
+```bash
+cd foodgram
+docker cp data foodgram_backend:/app/data
+docker exec -it foodgram_backend bash
+python manage.py load_db
+```
+### 4. Доступ к приложению:
 
 Фронтенд веб-приложения доступен по адресу: http://localhost
 
