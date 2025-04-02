@@ -4,22 +4,31 @@ Foodgram — это веб-приложение для обмена рецепт
 
 ### Пример сайта
 
-[Пример сайта](https:/foodgramevans.serveftp.com/)
+[Пример сайта](https:/foodgramevans.serveftp.com/)  
+
 [Документация АПИ](https://foodgramevans.serveftp.com/api/docs/)
 
 ### Структура проекта
-backend/ – серверная часть проекта (API, бизнес-логика, работа с базой данных).
-frontend/ – клиентская часть, содержащая веб-интерфейс для пользователей.
-infra/ – файлы конфигурации Docker и docker-compose, необходимые для развёртывания приложения.
-docs/ – документация проекта, включая спецификацию API.
-data/ – (если применимо) файлы с данными или статическими ресурсами.
+backend/ – серверная часть проекта (API, бизнес-логика, работа с базой данных).  
+
+frontend/ – клиентская часть, содержащая веб-интерфейс для пользователей.  
+
+infra/ – файлы конфигурации Docker и docker-compose, необходимые для развёртывания приложения.  
+
+docs/ – документация проекта, включая спецификацию API.  
+
+data/ – (если применимо) файлы с данными или статическими ресурсами.  
+
 postman_collection/ – коллекция Postman для тестирования API.
 
 ### Стэк технологий.
 
-[Django](https://www.djangoproject.com/)
-[Python](https://www.python.org/)
-[Django Rest Framework](https://www.django-rest-framework.org/)
+[Django](https://www.djangoproject.com/)  
+
+[Python](https://www.python.org/)  
+
+[Django Rest Framework](https://www.django-rest-framework.org/)  
+
 [Djoser](https://github.com/sunscrapers/djoser)
 
 ### Установка и запуск
