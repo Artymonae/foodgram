@@ -15,7 +15,8 @@ from rest_framework.permissions import (
 from rest_framework.response import Response
 
 from api.filters import IngredientFilter, RecipeFilter
-from api.helpers import RecipeActionMixin, ShortLink
+from api.helpers import ShortLink
+from api.mixins import RecipeActionMixin
 from api.paginations import Pagination
 from api.permissions import OwnerOrReadOnly
 from api.serializers import (
