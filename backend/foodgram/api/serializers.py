@@ -13,8 +13,6 @@ from recipes.models import (
 from users.constants import MAX_NAME_LENGTH, MIN_PASSWORD_LENGTH
 from users.models import Follow, User
 
-from api.mixins import UserRecipeRelationSerializerMixin
-
 
 logger = logging.getLogger(__name__)
 
@@ -341,6 +339,19 @@ class FollowSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return GetFollowSerializer(
             instance.following, context=self.context,
+        ).data
+
+
+class UserRecipeRelationSerializerMixin(serializers.ModelSerializer):
+    """Миксин для связей пользователь-рецепт."""
+
+    class Meta:
+        fields = ("user", "recipe")
+
+    def to_representation(self, instance):
+        return RecipeSerializer(
+            instance.recipe,
+            context=self.context,
         ).data
 
 
