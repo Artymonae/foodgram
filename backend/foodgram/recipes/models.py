@@ -183,15 +183,6 @@ class BaseFavoriteShoppingCart(models.Model):
 
         abstract = True
         ordering = ("-pub_date",)
-        constraints = [
-            models.UniqueConstraint(
-                fields=(
-                    "user",
-                    "recipe",
-                ),
-                name="unique_user_favorite_recipe",
-            )
-        ]
 
 
 class Favorite(BaseFavoriteShoppingCart):
@@ -203,6 +194,15 @@ class Favorite(BaseFavoriteShoppingCart):
         default_related_name = "favorites"
         verbose_name = "Избранное"
         verbose_name_plural = "Избранные"
+        constraints = [
+            models.UniqueConstraint(
+                fields=(
+                    "user",
+                    "recipe",
+                ),
+                name="unique_user_favorite_recipe",
+            )
+        ]
 
     def __str__(self):
         return f"Избранное: {self.recipe} у {self.user}"
@@ -217,6 +217,15 @@ class ShoppingCart(BaseFavoriteShoppingCart):
         default_related_name = "shoppingcarts"
         verbose_name = "Корзина"
         verbose_name_plural = "Корзина"
+        constraints = [
+            models.UniqueConstraint(
+                fields=(
+                    "user",
+                    "recipe",
+                ),
+                name="unique_user_shoppingcart_recipe",
+            )
+        ]
 
     def __str__(self):
         return f"{self.recipe} в корзине {self.user}"

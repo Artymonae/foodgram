@@ -167,7 +167,7 @@ class GetRecipeSerializer(serializers.ModelSerializer):
         return (
             request
             and request.user.is_authenticated
-            and request.user.user_favorite.filter(recipe=obj).exists()
+            and request.user.favorites.filter(recipe=obj).exists()
         )
 
     def get_is_in_shopping_cart(self, obj):
@@ -175,7 +175,7 @@ class GetRecipeSerializer(serializers.ModelSerializer):
         return (
             request
             and request.user.is_authenticated
-            and request.user.cart_recipes.filter(recipe=obj).exists()
+            and request.user.shoppingcarts.filter(recipe=obj).exists()
         )
 
 
