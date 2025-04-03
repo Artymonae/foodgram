@@ -44,7 +44,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
     """Сериализатор регистрации пользователя."""
 
     password = serializers.CharField(
-        min_length=MIN_PASSWORD_LENGTH, write_only=True, required=True,
+        min_length=MIN_PASSWORD_LENGTH, write_only=True, required=True, 
     )
     first_name = serializers.CharField(
         required=True,
@@ -56,7 +56,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-
         model = User
         fields = (
             "email",
@@ -65,6 +64,13 @@ class CreateUserSerializer(serializers.ModelSerializer):
             "last_name",
             "id",
             "password",
+        )
+        read_only_fields = (
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "id",
         )
 
     def create(self, validated_data):
