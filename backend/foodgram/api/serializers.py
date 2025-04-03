@@ -70,13 +70,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
             "id",
             "password",
         )
-        read_only_fields = (
-            "email",
-            "username",
-            "first_name",
-            "last_name",
-            "id",
-        )
 
     def create(self, validated_data):
         password = validated_data.pop("password")
