@@ -34,7 +34,12 @@ class UserSerializer(DjoserUser):
         )
 
     class Meta(DjoserUser.Meta):
-        fields = DjoserUser.Meta.fields + (
+        fields = (
+            "id",
+            "email",
+            "username",
+            "first_name",
+            "last_name",
             "is_subscribed",
             "avatar",
         )
@@ -64,6 +69,13 @@ class CreateUserSerializer(serializers.ModelSerializer):
             "last_name",
             "id",
             "password",
+        )
+        read_only_fields = (
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "id",
         )
 
     def create(self, validated_data):
