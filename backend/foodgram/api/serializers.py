@@ -190,7 +190,7 @@ class RecipesSerializer(serializers.ModelSerializer):
         slug_field="username",
         read_only=True,
     )
-    image = Base64ImageField()
+    image = Base64ImageField(required=True)
     ingredients = CreateRecipeIngredientSerializer(
         many=True, source="recipe_ingredients",
     )
