@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 
-from drf_extra_fields.fields import Base64ImageField
+from api.fields import Base64ImageField
 from recipes.models import (
     Favorite, Ingredient, Recipe,
     RecipeIngredient, ShoppingCart, Tag,)
@@ -34,6 +34,7 @@ class UserSerializer(DjoserUser):
         )
 
     class Meta(DjoserUser.Meta):
+
         fields = (
             "id",
             "email",
@@ -61,6 +62,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
+
         model = User
         fields = (
             "email",
@@ -274,7 +276,7 @@ class RecipesSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     """Короткий сериализатор рецепта для отображения в списках."""
 
-    image = Base64ImageField()
+    image = Base64ImageField(required=True)
 
     class Meta:
 
@@ -350,7 +352,8 @@ class UserRecipeRelationSerializerMixin(serializers.ModelSerializer):
     """Миксин для связей пользователь-рецепт."""
 
     class Meta:
-        fields = ("user", "recipe")
+
+        fields = ("user", "recipe",)
 
     def to_representation(self, instance):
         return RecipeSerializer(
@@ -363,6 +366,7 @@ class ShoppingCartSerializer(UserRecipeRelationSerializerMixin):
     """Сериализатор для корзины покупок."""
 
     class Meta(UserRecipeRelationSerializerMixin.Meta):
+
         model = ShoppingCart
         validators = [
             UniqueTogetherValidator(
@@ -376,10 +380,11 @@ class FavoriteSerializer(UserRecipeRelationSerializerMixin):
     """Сериализатор для избранных рецептов."""
 
     class Meta(UserRecipeRelationSerializerMixin.Meta):
+
         model = Favorite
         validators = [
             UniqueTogetherValidator(
                 queryset=Favorite.objects.all(),
                 fields=("user", "recipe"),
-            )
+            ),
         ]
