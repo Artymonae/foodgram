@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.conf import settings
 from django.urls import include, path
 
 from api.views import redirect_to_recipe_detail
@@ -13,7 +12,3 @@ urlpatterns = [
         name="short_link_redirect",
     ),
 ]
-if settings.DEBUG:
-    import debug_toolbar
-    # Добавить к списку urlpatterns список адресов из приложения debug_toolbar:
-    urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)

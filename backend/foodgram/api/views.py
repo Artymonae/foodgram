@@ -267,7 +267,7 @@ class UserViewSet(DjoserUserViewSet):
         if limit:
             following_users = following_users[:int(limit)]
 
-        result_page = self.paginate_queryset(following_users, request)
+        result_page = self.paginate_queryset(following_users)
         serializer = GetFollowSerializer(
             result_page, many=True, context={"request": request},
         )
