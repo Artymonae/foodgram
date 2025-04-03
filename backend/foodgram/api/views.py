@@ -125,7 +125,7 @@ class RecipesViewSet(RecipeActionMixin, viewsets.ModelViewSet):
         )
         ingredients = (
             RecipeIngredient.objects.filter(
-                recipe__cart_recipes__user=request.user,
+                recipe__shoppingcarts__user=request.user,
             )
             .values(
                 "ingredient__name",
