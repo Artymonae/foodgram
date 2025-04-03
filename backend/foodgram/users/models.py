@@ -104,7 +104,7 @@ class Follow(models.Model):
 
     class Meta:
 
-        ordering = ("following",)
+        ordering = ("user",)
         verbose_name = "Подписчик"
         verbose_name_plural = "Подписчики"
         constraints = [
