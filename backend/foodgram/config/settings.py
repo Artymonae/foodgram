@@ -125,7 +125,7 @@ DJOSER = {
     "SERIALIZERS": {
         "user": "api.serializers.UserSerializer",
         "current_user": "api.serializers.UserSerializer",
-        "user_create": "api.serializers.CreateUserSerializer",
+        "user_create": "api.serializers.UserSerializer",
     },
     "HIDE_USERS": False,
     "PERMISSIONS": {
