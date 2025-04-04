@@ -10,6 +10,7 @@ from api.fields import Base64ImageField
 from recipes.models import (
     Favorite, Ingredient, Recipe,
     RecipeIngredient, ShoppingCart, Tag,)
+from users.constants import MIN_PASSWORD_LENGTH
 from users.models import Follow, User
 
 
@@ -17,15 +18,20 @@ logger = logging.getLogger(__name__)
 
 
 class UserSerializer(DjoserUser):
-    """Сериализатор пользователя для получения данных с инф. о подписке."""
+    """Сериализатор пользователя для получения инф о подписке и регистрации."""
 
     is_subscribed = serializers.SerializerMethodField(
-        method_name="get_is_followed",
+        method_name="get_is_followed"
     )
-    avatar = Base64ImageField(required=False)
+    avatar = Base64ImageField()
+    password = serializers.CharField(
+        min_length=MIN_PASSWORD_LENGTH,
+        write_only=True,
+        required=True,
+    )
 
     class Meta(DjoserUser.Meta):
-
+        model = User
         fields = DjoserUser.Meta.fields + (
             "is_subscribed",
             "avatar",
@@ -37,6 +43,16 @@ class UserSerializer(DjoserUser):
             request
             and request.user.is_authenticated
             and request.user.following.filter(following=obj).exists()
+        )
+
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+        user = User.objects.create(**validated_data)
+
+        logger.info("Создан новый пользователь: %s", user)
+        return (
+            user.set_password(password)
+            .save()
         )
 
 
