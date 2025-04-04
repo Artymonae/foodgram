@@ -261,13 +261,9 @@ class UserViewSet(DjoserUserViewSet):
     def get_subscriptions(self, request):
         """Получение подписок."""
         user = get_object_or_404(User, username=request.user.username)
-        limit = request.query_params.get("limit")
         following_users = User.objects.filter(following__user=user)
 
-        if limit:
-            following_users = following_users[:int(limit)]
-
-        result_page = self.paginate_queryset(following_users)
+        result_page = self.paginate_queryset(request, following_users)
         serializer = GetFollowSerializer(
             result_page, many=True, context={"request": request},
         )
