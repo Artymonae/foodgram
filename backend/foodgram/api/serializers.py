@@ -22,7 +22,7 @@ class UserSerializer(DjoserUser):
     is_subscribed = serializers.SerializerMethodField(
         method_name="get_is_followed",
     )
-    avatar = Base64ImageField()
+    avatar = Base64ImageField(required=False)
 
     class Meta(DjoserUser.Meta):
 
