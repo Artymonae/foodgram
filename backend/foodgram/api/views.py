@@ -20,7 +20,7 @@ from api.mixins import RecipeActionMixin
 from api.paginations import Pagination
 from api.permissions import OwnerOrReadOnly
 from api.serializers import (
-    CreateUserSerializer, FavoriteSerializer, FollowSerializer,
+    FavoriteSerializer, FollowSerializer,
     GetFollowSerializer, IngredientSerializer, RecipesSerializer,
     ShoppingCartSerializer, TagSerializer, UserAvatarSerializer,
     UserSerializer,)
@@ -169,7 +169,7 @@ class UserViewSet(DjoserUserViewSet):
     """Вьюсет для работы с пользователями."""
 
     queryset = User.objects.all()
-    serializer_class = CreateUserSerializer
+    serializer_class = UserSerializer
     pagination_class = Pagination
 
     def get_serializer_class(self):
